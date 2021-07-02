@@ -1,0 +1,12 @@
+apiVersion: k8s.nginx.org/v1
+kind: Policy
+metadata:
+  name: hipsterstore-waf-policy
+spec:
+  waf:
+    enable: true
+    apPolicy: "dataguard-blocking"
+    securityLog:
+      enable: true
+      apLogConf: "logconf"
+      logDest: "syslog:server=10.1.1.5:5144"

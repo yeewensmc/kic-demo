@@ -1,0 +1,20 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: httpbin
+spec:
+  host: httpbin.helloclouds.net
+  tls:
+    secret: helloclouds
+    redirect:
+       enable: true
+  policies:
+  - name: httpbin-waf-policy
+  upstreams:
+  - name: httpbin-upstream
+    service: httpbin-svc
+    port: 80
+  routes:
+  - path: /
+    action:
+      pass: httpbin-upstream

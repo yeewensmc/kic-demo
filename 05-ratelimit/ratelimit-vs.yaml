@@ -1,0 +1,36 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: ratelimit
+spec:
+  host: ratelimit.helloclouds.net
+  tls:
+    secret: helloclouds
+    redirect:
+       enable: true 
+  upstreams:
+  - name: frontend
+    service: frontend
+    port: 8080
+  - name: tea
+    service: tea-svc
+    port: 80
+  - name: coffee
+    service: coffee-svc
+    port: 80
+  routes:
+  - path: /
+    policies:
+    - name: rate-limit-burst-policy
+    action:
+      pass: frontend
+  - path: /tea
+    action:
+      proxy:
+        upstream: tea
+  - path: /coffee
+    policies:
+    - name: rate-limit-policy
+    action:
+      proxy:
+        upstream: coffee

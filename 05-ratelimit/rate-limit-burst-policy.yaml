@@ -1,0 +1,10 @@
+apiVersion: k8s.nginx.org/v1
+kind: Policy
+metadata:
+  name: rate-limit-burst-policy
+spec:
+  rateLimit:
+    rate: 5r/s
+    #burst: 10
+    key: ${http_user_id}
+    zoneSize: 10M

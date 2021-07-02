@@ -1,0 +1,18 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: hipsterstore-xnap
+spec:
+  host: hipsterstore-xnap.helloclouds.net
+  tls:
+    secret: helloclouds
+    redirect:
+       enable: true
+  upstreams:
+  - name: frontend
+    service: frontend
+    port: 8080
+  routes:
+  - path: /
+    action:
+      pass: frontend

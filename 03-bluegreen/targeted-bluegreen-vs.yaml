@@ -1,0 +1,33 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: bluegreen-vs
+spec:
+  host: bluegreen.helloclouds.net
+  tls:
+    secret: helloclouds
+    redirect:
+       enable: true
+  upstreams:
+  - name: greenbullet
+    service: greenbullet-svc
+    port: 80
+  - name: bluebullet
+    service: bluebullet-svc
+    port: 80
+  routes:
+  - path: /
+    matches:
+    - conditions:
+      - header: user
+        value: testgroup
+      splits:
+      - weight: 1
+        action:
+          pass: greenbullet
+      - weight: 99
+        action:
+          pass: bluebullet
+    action:
+      pass: bluebullet
+

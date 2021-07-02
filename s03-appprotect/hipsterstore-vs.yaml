@@ -1,0 +1,20 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: hipsterstore
+spec:
+  host: hipsterstore.helloclouds.net
+  tls:
+    secret: helloclouds
+    redirect:
+       enable: true
+  policies:
+  - name: hipsterstore-waf-policy
+  upstreams:
+  - name: frontend
+    service: frontend
+    port: 8080
+  routes:
+  - path: /
+    action:
+      pass: frontend
